@@ -1,219 +1,190 @@
-import React from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableRow,
-} from "../ui/table";
+"use client";
 
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Table, TableBody, TableCell, TableHeader, TableRow } from "../ui/table";
 import Badge from "../ui/badge/Badge";
 import Image from "next/image";
+import { toast } from "react-hot-toast";
+import { ConfirmationModal } from "../mine/ConfirmationModal";
+import Button from "../ui/button/Button";
+import { LockIcon, TrashBinIcon } from "@/icons";
+import Link from "next/link";
 
-interface Order {
-  id: number;
-  user: {
-    image: string;
-    name: string;
-    role: string;
-  };
-  projectName: string;
-  team: {
-    images: string[];
-  };
-  status: string;
-  budget: string;
+interface User {
+  uid: string;
+  email: string;
+  displayName: string;
+  photoURL: string | null;
+  disabled: boolean;
 }
 
-// Define the table data using the interface
-const tableData: Order[] = [
-  {
-    id: 1,
-    user: {
-      image: "/images/user/user-17.jpg",
-      name: "Lindsey Curtis",
-      role: "Web Designer",
-    },
-    projectName: "Agency Website",
-    team: {
-      images: [
-        "/images/user/user-22.jpg",
-        "/images/user/user-23.jpg",
-        "/images/user/user-24.jpg",
-      ],
-    },
-    budget: "3.9K",
-    status: "Active",
-  },
-  {
-    id: 2,
-    user: {
-      image: "/images/user/user-18.jpg",
-      name: "Kaiya George",
-      role: "Project Manager",
-    },
-    projectName: "Technology",
-    team: {
-      images: ["/images/user/user-25.jpg", "/images/user/user-26.jpg"],
-    },
-    budget: "24.9K",
-    status: "Pending",
-  },
-  {
-    id: 3,
-    user: {
-      image: "/images/user/user-17.jpg",
-      name: "Zain Geidt",
-      role: "Content Writing",
-    },
-    projectName: "Blog Writing",
-    team: {
-      images: ["/images/user/user-27.jpg"],
-    },
-    budget: "12.7K",
-    status: "Active",
-  },
-  {
-    id: 4,
-    user: {
-      image: "/images/user/user-20.jpg",
-      name: "Abram Schleifer",
-      role: "Digital Marketer",
-    },
-    projectName: "Social Media",
-    team: {
-      images: [
-        "/images/user/user-28.jpg",
-        "/images/user/user-29.jpg",
-        "/images/user/user-30.jpg",
-      ],
-    },
-    budget: "2.8K",
-    status: "Cancel",
-  },
-  {
-    id: 5,
-    user: {
-      image: "/images/user/user-21.jpg",
-      name: "Carla George",
-      role: "Front-end Developer",
-    },
-    projectName: "Website",
-    team: {
-      images: [
-        "/images/user/user-31.jpg",
-        "/images/user/user-32.jpg",
-        "/images/user/user-33.jpg",
-      ],
-    },
-    budget: "4.5K",
-    status: "Active",
-  },
-];
-
 export default function BasicTableOne() {
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [apiLoader, setApiLoader] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<{ uid: string; action: "block" | "delete" } | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios.get("/api/users");
+      setUsers(data.users);
+    } catch (err: any) {
+      setError(err.response?.data?.error || "Error fetching users");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleBlockUser = async (uid: string, disabled: boolean) => {
+    setApiLoader(true);
+    try {
+      await axios.put(`/api/users/${uid}/block`, { disabled: !disabled });
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.uid === uid ? { ...user, disabled: !disabled } : user
+        )
+      );
+    } catch (err) {
+      toast.error("Error updating user status!");
+      console.error("Error updating user status:", err);
+    } finally {
+      setApiLoader(false);
+    }
+  };
+
+  const handleDeleteUser = async (uid: string) => {
+    setApiLoader(true);
+    try {
+      await axios.delete(`/api/users/${uid}/delete`);
+      setUsers((prevUsers) => prevUsers.filter((user) => user.uid !== uid));
+    } catch (err) {
+      toast.error("Error while deleting user!");
+      console.error("Error deleting user:", err);
+    } finally {
+      setApiLoader(false);
+    }
+  };
+
+  const openModal = (uid: string, action: "block" | "delete") => {
+    setSelectedUser({ uid, action });
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedUser(null);
+  };
+
+  const confirmAction = () => {
+    if (selectedUser) {
+      if (selectedUser.action === "block") {
+        const user = users.find((u) => u.uid === selectedUser.uid);
+        if (user) {
+          handleBlockUser(user.uid, user.disabled);
+        }
+      } else if (selectedUser.action === "delete") {
+        handleDeleteUser(selectedUser.uid);
+      }
+    }
+    closeModal();
+  };
+
+  // Filter users based on search term
+  const filteredUsers = users.filter(
+    (user) =>
+      user.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  if (loading) return <p className="px-5 py-3 text-white text-start text-theme-xs dark:text-gray-400">Loading users...</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
+
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+      {/* Search Bar */}
+      <div className="p-4 border-b border-gray-100 dark:border-white/[0.05]">
+        <input
+          type="text"
+          placeholder="Search by name or email..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+        />
+      </div>
+
       <div className="max-w-full overflow-x-auto">
-        <div className="min-w-[1102px]">
+        <div className="min-w-[800px]">
           <Table>
-            {/* Table Header */}
             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
               <TableRow>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >
-                  User
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >
-                  Project Name
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >
-                  Team
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >
-                  Status
-                </TableCell>
-                <TableCell
-                  isHeader
-                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                >
-                  Budget
-                </TableCell>
+                <TableCell isHeader className="px-5 py-3 text-gray-500 text-start text-theme-xs dark:text-gray-400">User</TableCell>
+                <TableCell isHeader className="px-5 py-3 text-gray-500 text-start text-theme-xs dark:text-gray-400">Email</TableCell>
+                <TableCell isHeader className="px-5 py-3 text-gray-500 text-start text-theme-xs dark:text-gray-400">Status</TableCell>
+                <TableCell isHeader className="px-5 py-3 text-gray-500 text-start text-theme-xs dark:text-gray-400">Actions</TableCell>
               </TableRow>
             </TableHeader>
 
-            {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {tableData.map((order) => (
-                <TableRow key={order.id}>
+              {filteredUsers.map((user) => (
+                <TableRow key={user.uid}>
                   <TableCell className="px-5 py-4 sm:px-6 text-start">
                     <div className="flex items-center gap-3">
+                      <Link href={`/users/${user.uid}`}>
                       <div className="w-10 h-10 overflow-hidden rounded-full">
-                        <Image
-                          width={40}
-                          height={40}
-                          src={order.user.image}
-                          alt={order.user.name}
-                        />
+                        {user.photoURL ? (
+                          <Image width={40} height={40} src={user.photoURL} alt={user.displayName} />
+                        ) : (
+                          <div className="w-10 h-10 flex justify-center items-center bg-white overflow-hidden border border-gray-200 rounded-full dark:border-gray-800">
+                          <p className="font-semibold "> {user.email.charAt(0).toLocaleUpperCase()}</p>
+                     
+                    </div>
+                        )}
                       </div>
+                      </Link>
                       <div>
-                        <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                          {order.user.name}
-                        </span>
-                        <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order.user.role}
-                        </span>
+                        <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">{user.displayName}</span>
                       </div>
                     </div>
                   </TableCell>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{user.email}</TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.projectName}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="flex -space-x-2">
-                      {order.team.images.map((teamImage, index) => (
-                        <div
-                          key={index}
-                          className="w-6 h-6 overflow-hidden border-2 border-white rounded-full dark:border-gray-900"
-                        >
-                          <Image
-                            width={24}
-                            height={24}
-                            src={teamImage}
-                            alt={`Team member ${index + 1}`}
-                            className="w-full"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <Badge
-                      size="sm"
-                      color={
-                        order.status === "Active"
-                          ? "success"
-                          : order.status === "Pending"
-                          ? "warning"
-                          : "error"
-                      }
-                    >
-                      {order.status}
+                    <Badge size="sm" color={user.disabled ? "error" : "success"}>
+                      {user.disabled ? "Blocked" : "Active"}
                     </Badge>
                   </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {order.budget}
+                  <TableCell className="">
+                    <div className="flex gap-3">
+                      <Button
+                        onClick={() => openModal(user.uid, "block")}
+                        className={user.disabled ? "border bg-success-500 hover:bg-success-600" : "bg-warning-500 hover:bg-warning-600"}
+                        disabled={apiLoader}
+                        size="sm"
+                        variant="primary"
+                        startIcon={<LockIcon />}
+                      >
+                        {user.disabled ? "Unblock" : "Block"}
+                      </Button>
+
+                      <Button
+                        onClick={() => openModal(user.uid, "delete")}
+                        className={"bg-error-500 hover:bg-error-600"}
+                        disabled={apiLoader}
+                        size="sm"
+                        variant="primary"
+                        startIcon={<TrashBinIcon />}
+                      >
+                        Delete
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -221,6 +192,20 @@ export default function BasicTableOne() {
           </Table>
         </div>
       </div>
+
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onConfirm={confirmAction}
+        title={selectedUser?.action === "delete" ? "Delete User" : selectedUser?.action === "block" ? "Block/Unblock User" : ""}
+        message={
+          selectedUser?.action === "delete"
+            ? "Are you sure you want to delete this user?"
+            : selectedUser?.action === "block"
+              ? "Are you sure you want to block/unblock this user?"
+              : ""
+        }
+      />
     </div>
   );
 }

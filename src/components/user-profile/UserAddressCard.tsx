@@ -6,7 +6,14 @@ import Button from "../ui/button/Button";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
 
-export default function UserAddressCard() {
+interface User {
+  uid: string;
+  email: string;
+  displayName: string;
+  photoURL: string | null;
+  disabled: boolean;
+}
+export default function UserAddressCard({user}: {user: User}) {
   const { isOpen, openModal, closeModal } = useModal();
   const handleSave = () => {
     // Handle save logic here
