@@ -2,7 +2,7 @@ import { auth } from "@/lib/firebaseAdmin";
 import { NextResponse } from "next/server";
 
 // ✅ Get a user by UID
-export async function GET(req: Request, { params }: { params: { uid: string } }) {
+export async function GET(req: Request, { params }: { params:any }) {
   try {
     // Fetch the user by UID
     const userRecord = await auth.getUser(params.uid);
