@@ -1,14 +1,8 @@
 import { auth } from "@/lib/firebaseAdmin";
 import { NextResponse } from "next/server";
 
-interface Context {
-  params: {
-    uid: string;
-  };
-}
-
-export async function PUT(req: Request, context: Context) {
-  const { uid } = context.params; // Correct way to access route parameters
+export async function PUT(req: Request, context: { params: { uid?: string } }) {
+  const { uid } = await context.params; // Await params here
   if (!uid) {
     return NextResponse.json({ error: "User ID is required" }, { status: 400 });
   }
