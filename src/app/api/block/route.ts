@@ -3,8 +3,16 @@ import { auth } from "@/lib/firebaseAdmin";
 
 export async function POST(req: Request) {
   try {
-    const { uid, disable } = await req.json(); // `disable: true` blocks, `disable: false` unblocks
-    if (!uid) return NextResponse.json({ error: "User ID is required" }, { status: 400 });
+    if (req.headers.get("content-type") !== "application/json") {
+      return NextResponse.json({ error: "Invalid content type" }, { status: 400 });
+    }
+
+    const body = await req.json();
+    const { uid, disable } = body;
+
+    if (!uid) {
+      return NextResponse.json({ error: "User ID is required" }, { status: 400 });
+    }
 
     await auth.updateUser(uid, { disabled: disable });
 
@@ -13,3 +21,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Failed to update user" }, { status: 500 });
   }
 }
+
