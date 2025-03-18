@@ -29,15 +29,13 @@ export default function AuthLayout({
                     alt="Logo"
                   />
                 </Link>
-                <p className="text-center text-gray-400 dark:text-white/60">
+                <h1 className="text-center text-2xl text-gray-400 dark:text-white/60">
                  AL Marjan Rent A Cars
-                </p>
+                </h1>
               </div>
             </div>
           </div>
-          <div className="fixed bottom-6 right-6 z-50 hidden sm:block">
-            <ThemeTogglerTwo />
-          </div>
+       
         </div>
       </ThemeProvider>
     </div>
