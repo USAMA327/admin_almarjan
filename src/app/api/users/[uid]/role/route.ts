@@ -2,7 +2,7 @@
 import { auth } from "@/lib/firebaseAdmin";
 import { NextResponse } from "next/server";
 
-export async function PUT(req: Request, { params }: { params: { uid: string } }) {
+export async function PUT(req: Request, { params }: { params: any}) {
   try {
     const { role } = await req.json(); // Get the role from the request body
 
