@@ -35,3 +35,10 @@ export interface Package {
     description: string;
   }[];
 }
+
+// Define Image type
+export type ImageData = {
+  id: string;
+  url: string;
+  name: string;
+};

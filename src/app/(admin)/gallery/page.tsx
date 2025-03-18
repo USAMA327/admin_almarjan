@@ -10,12 +10,7 @@ import { toast } from "react-hot-toast";
 import Button from "@/components/ui/button/Button";
 import ComponentCard from "@/components/common/ComponentCard";
 import imageCompression from 'browser-image-compression';
-// Define Image type
-type ImageData = {
-  id: string;
-  url: string;
-  name: string;
-};
+import { ImageData } from "@/types/types";
 
 export default function DropzoneGallery() {
     const [images, setImages] = useState<ImageData[]>([]);
@@ -35,7 +30,7 @@ export default function DropzoneGallery() {
 
   const onDrop = async (acceptedFiles: File[]) => {
     setUploading(true);
-    const API_KEY = "1152500473f71c3c34e5df48ccbe51ff"; // Replace with your imgbb API key
+    const API_KEY = process.env.NEXT_PUBLIC_IMBB_API; // Replace with your imgbb API key
     const imgbbUrl = `https://api.imgbb.com/1/upload?key=${API_KEY}`;
   
     try {

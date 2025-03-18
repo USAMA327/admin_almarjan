@@ -19,7 +19,7 @@ interface User {
   displayName: string;
   photoURL: string | null;
   disabled: boolean;
-  role: "admin" | "editor" | "viewer"; // Add role field
+  role: "admin" | "user"; // Add role field
 }
 
 export default function Users() {
@@ -40,6 +40,7 @@ export default function Users() {
     try {
       const { data } = await axios.get("/api/users");
       setUsers(data.users);
+    
     } catch (err: any) {
       setError(err.response?.data?.error || "Error fetching users");
     } finally {
@@ -77,7 +78,7 @@ export default function Users() {
     }
   };
 
-  const handleUpdateRole = async (uid: string, role: "admin" | "editor" | "viewer") => {
+  const handleUpdateRole = async (uid: string, role: "admin"  | "user") => {
     setApiLoader(true);
     try {
       await axios.put(`/api/users/${uid}/role`, { role });
@@ -179,13 +180,12 @@ export default function Users() {
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{user.email}</TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <select
-                      value={user.role}
-                      onChange={(e) => handleUpdateRole(user.uid, e.target.value as "admin" | "editor" | "viewer")}
+                      value={user.role ? user.role : "user"}
+                      onChange={(e) => handleUpdateRole(user.uid, e.target.value as "admin" | "user")}
                       className="px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                     >
                       <option value="admin">Admin</option>
-                      <option value="editor">Editor</option>
-                      <option value="viewer">Viewer</option>
+                      <option value="user">User</option>
                     </select>
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
