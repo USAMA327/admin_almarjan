@@ -52,6 +52,13 @@ import ChatIcon from "./chat.svg";
 import MoreDotIcon from "./more-dot.svg";
 import BellIcon from "./bell.svg";
 import LinkIcon from "./link.svg";
+import Car from "./car.svg"
+import Gallery from "./gallery.svg";
+import Addon from "./addon.svg"
+import Package from "./package.svg";
+import Discount from "./discount.svg";
+import User from "./user.svg";
+import Booking from "./booking.svg";
 export {
   DownloadIcon,
   BellIcon,
@@ -106,5 +113,12 @@ export {
   HorizontaLDots,
   ChevronUpIcon,
   ChatIcon,
-  LinkIcon
+  LinkIcon,
+  Car,
+  Gallery,
+  Addon,
+  Package,
+  Discount,
+  User,
+  Booking
 };

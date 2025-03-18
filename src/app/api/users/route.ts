@@ -11,6 +11,7 @@ export async function GET() {
       displayName: user.displayName,
       provider: user.providerData.length > 0 ? user.providerData[0].providerId : "unknown",
       photoURL: user.photoURL,
+      role:user.customClaims?.role
     }));
 
     return NextResponse.json({ users });

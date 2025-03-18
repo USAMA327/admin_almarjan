@@ -8,4 +8,30 @@ export interface Car {
     isAuto: boolean;
     hasAC: boolean;
     photoURL: string; // Direct URL of the car photo
-  }
+}
+  
+export interface User {
+  uid: string;
+  email: string;
+  displayName: string;
+  photoURL: string | null;
+  disabled: boolean;
+  nationality?: string; // Additional fields from Firestore
+  phone?: string;
+  createdAt?: string;
+}
+
+export interface Package {
+  id?: string; // Optional because it will be added by Firestore
+  name: string;
+  onlineDiscount: number;
+  rating: number;
+  excessUpto: number;
+  newPrice: number;
+  oldPrice: number;
+  list: {
+    available: boolean;
+    title: string;
+    description: string;
+  }[];
+}

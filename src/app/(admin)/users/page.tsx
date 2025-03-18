@@ -2,15 +2,16 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Table, TableBody, TableCell, TableHeader, TableRow } from "../ui/table";
-import Badge from "../ui/badge/Badge";
+import { Table, TableBody, TableCell, TableHeader } from "@/components/ui/table";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
-import { ConfirmationModal } from "../mine/ConfirmationModal";
-import Button from "../ui/button/Button";
 import { LockIcon, TrashBinIcon } from "@/icons";
 import Link from "next/link";
-import Loader from "../mine/Loader";
+import Badge from "@/components/ui/badge/Badge";
+import Loader from "@/components/mine/Loader";
+import { ConfirmationModal } from "@/components/mine/ConfirmationModal";
+import Button from "@/components/ui/button/Button";
+import { TableRow } from "@/components/ui/table";
 
 interface User {
   uid: string;
