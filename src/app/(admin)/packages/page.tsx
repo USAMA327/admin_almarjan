@@ -148,13 +148,13 @@ const PackagesTable = () => {
                   >
                     {apiLoader ? "Loading..." : "Edit"}
                   </button>
-                  <button
+                  {/* <button
                     onClick={() => handleDelete(pkg.id!)}
                     className="bg-red-500 hover:bg-red-600 px-3 py-1 rounded"
                     disabled={apiLoader}
                   >
                     {apiLoader ? "Loading..." : "Delete"}
-                  </button>
+                  </button> */}
                 </td>
               </tr>
             ))}
