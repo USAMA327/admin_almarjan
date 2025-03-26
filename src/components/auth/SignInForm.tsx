@@ -45,7 +45,6 @@ export default function SignInForm() {
     if (user) {
       setCookie("token", user.uid, { path: "/", maxAge: 60 * 60 * 24 });
       route.push("/")
-  
     }
   };
 

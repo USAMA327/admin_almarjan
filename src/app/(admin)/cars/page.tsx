@@ -210,10 +210,17 @@ const CarsForm = () => {
                       <ErrorMessage name="brand" component="div" className="text-red-500 text-sm" />
                     </div>
                     <div>
-                      <label className="block">Category</label>
-                      <Field type="text" name="category" className="w-full p-2 rounded bg-gray-800 border border-gray-700" />
-                      <ErrorMessage name="category" component="div" className="text-red-500 text-sm" />
-                    </div>
+  <label className="block">Category</label>
+  <Field as="select" name="category" className="w-full p-2 rounded bg-gray-800 border border-gray-700">
+    <option value="">Select a category</option>
+    <option value="Economy">Economy</option>
+    <option value="SUVs">SUVs</option>
+    <option value="Mid size Sedan">Mid size Sedan</option>
+    <option value="7 Seater">7 Seater</option>
+  </Field>
+  <ErrorMessage name="category" component="div" className="text-red-500 text-sm" />
+</div>
+
                   </div>
 
                   {/* Number, Passengers, and Price in a row */}
