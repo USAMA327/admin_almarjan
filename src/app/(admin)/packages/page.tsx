@@ -130,8 +130,8 @@ const PackagesTable = () => {
               <th className="p-2 border">Online Discount</th>
               <th className="p-2 border">7 Seater Price</th>
               <th className="p-2 border">Economy Price</th>
-              <th className="p-2 border">Small SUV Price</th>
-              <th className="p-2 border">Standard SUV Price</th>
+              <th className="p-2 border">SUVs Price</th>
+              <th className="p-2 border">Mid-Size Sedan Price</th>
               <th className="p-2 border">Rating</th>
               <th className="p-2 border">Excess Upto</th>
               <th className="p-2 border">Actions</th>
@@ -253,7 +253,7 @@ const PackagesTable = () => {
                         <ErrorMessage name="priceEconomy" component="div" className="text-red-500 text-sm" />
                       </div>
                       <div>
-                        <label className="block">Small SUV Base Price</label>
+                        <label className="block">SUVs Base Price</label>
                         <Field
                           type="number"
                           name="priceSmallSUV"
@@ -262,7 +262,7 @@ const PackagesTable = () => {
                         <ErrorMessage name="priceSmallSUV" component="div" className="text-red-500 text-sm" />
                       </div>
                       <div>
-                        <label className="block">Standard SUV Base Price</label>
+                        <label className="block">Mid-Size Sedan Base Price</label>
                         <Field
                           type="number"
                           name="priceStandardSUV"
@@ -287,13 +287,13 @@ const PackagesTable = () => {
                         </div>
                       </div>
                       <div>
-                        <label className="block">Small SUV Discounted Price</label>
+                        <label className="block">SUVs Discounted Price</label>
                         <div className="w-full p-2 rounded bg-gray-800 border border-gray-700">
                           ${(values.priceSmallSUV * (100 - values.onlineDiscount) / 100).toFixed(2)}
                         </div>
                       </div>
                       <div>
-                        <label className="block">Standard SUV Discounted Price</label>
+                        <label className="block">Mid-Size Sedan Discounted Price</label>
                         <div className="w-full p-2 rounded bg-gray-800 border border-gray-700">
                           ${(values.priceStandardSUV * (100 - values.onlineDiscount) / 100).toFixed(2)}
                         </div>

@@ -200,12 +200,12 @@ const AddonsForm = () => {
                       <ErrorMessage name="priceEconomy" component="div" className="text-red-500 text-sm" />
                     </div>
                     <div>
-                      <label className="block">Price (Small SUV)</label>
+                      <label className="block">Price (SUVs)</label>
                       <Field type="number" name="priceSmallSUV" className="w-full p-2 rounded bg-gray-800 border border-gray-700" />
                       <ErrorMessage name="priceSmallSUV" component="div" className="text-red-500 text-sm" />
                     </div>
                     <div>
-                      <label className="block">Price (Standard SUV)</label>
+                      <label className="block">Price (Mid-Size Sedan)</label>
                       <Field type="number" name="priceStandardSUV" className="w-full p-2 rounded bg-gray-800 border border-gray-700" />
                       <ErrorMessage name="priceStandardSUV" component="div" className="text-red-500 text-sm" />
                     </div>
