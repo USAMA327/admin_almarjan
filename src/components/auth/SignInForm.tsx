@@ -47,7 +47,10 @@ export default function SignInForm() {
     const user = await signInWithGoogle();
     if (user) {
       setCookie("token", user.uid, { path: "/", maxAge: 60 * 60 * 24 });
-      route.push("/")
+         // Ensure navigation works in production
+    setTimeout(() => {
+      route.push("/");
+    }, 100);
     }
   };
 
