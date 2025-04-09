@@ -25,62 +25,62 @@ const Summary: React.FC<SummaryProps> = ({
     finalTotal,
     user
 }) => {
-  
-      // Function to calculate the discounted price based on car category
-  const calculateDiscountedPrice = (addons: any) => {
-    switch (car.category) {
-      case "Economy":
-        return addons.priceEconomy
-      case "SUVs":
-        return addons.priceSmallSUV 
-      case "Mid size Sedan":
-        return addons.priceStandardSUV
-      default:
-        return addons.price7Seater
-    }
-  };
-    
+
+    // Function to calculate the discounted price based on car category
+    const calculateDiscountedPrice = (addons: any) => {
+        switch (car.category) {
+            case "Economy":
+                return addons.priceEconomy
+            case "SUVs":
+                return addons.priceSmallSUV
+            case "Mid size Sedan":
+                return addons.priceStandardSUV
+            default:
+                return addons.price7Seater
+        }
+    };
+
     return (
         <div className=" p-6 rounded-lg">
             <div className="space-y-3">
                 <hr />
                 {
                     user &&
-                <>
-                      <SummaryItem
+                    <>
+                        <SummaryItem
 
-label={"Name"}
-value={user.displayName}
+                            label={"Name"}
+                            value={user.displayName}
 
-/>
-
-
-<SummaryItem
-label={"Email"}
-value={user.email}
-/>
+                        />
 
 
-
-<SummaryItem
-
-label={"Phone"}
-
-value={user.phone}
-
-/>
+                        <SummaryItem
+                            label={"Email"}
+                            value={user.email}
+                        />
 
 
-<SummaryItem
 
-label={"Nationality"}
+                        <SummaryItem
 
-value={user.nationality}
+                            label={"Phone"}
 
-/>
-                </>
-}
-          
+                            value={user.phone}
+
+                        />
+
+
+                        <SummaryItem
+
+                            label={"Nationality"}
+
+                            value={user.nationality}
+
+                        />
+                    </>
+                }
+
                 <hr />
                 {/* Car Details */}
                 <div className="flex flex-col md:flex-row items-center gap-2">
@@ -185,7 +185,7 @@ value={user.nationality}
 
                 <hr className="border-gray-200" />
 
-                
+
             </div>
         </div>
     );

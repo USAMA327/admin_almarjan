@@ -266,6 +266,7 @@ export default function BookingsPage() {
               <tr key={booking.id} className="bg-gray-700 hover:bg-gray-600">
                 <td className="p-2 border">{booking.id}</td>
                 <td className="p-2 border">
+                  <p className=" mb-2"><small className="">Selected</small> : {booking.car.name}</p>
                   <select
                     value={booking.car.id}
                     onChange={(e) => handleCarChange(booking.id, e.target.value)}
