@@ -25,6 +25,21 @@ const Summary: React.FC<SummaryProps> = ({
     finalTotal,
     user
 }) => {
+  
+      // Function to calculate the discounted price based on car category
+  const calculateDiscountedPrice = (addons: any) => {
+    switch (car.category) {
+      case "Economy":
+        return addons.priceEconomy
+      case "SUVs":
+        return addons.priceSmallSUV 
+      case "Mid size Sedan":
+        return addons.priceStandardSUV
+      default:
+        return addons.price7Seater
+    }
+  };
+    
     return (
         <div className=" p-6 rounded-lg">
             <div className="space-y-3">
@@ -150,8 +165,8 @@ value={user.nationality}
                             <SummaryItem
                                 key={addon.id}
                                 label={`${addon.name}`}
-                                formula=""
-                                value={addon.perDay ? "Per Day" : ""}
+                                value={`AED ${calculateDiscountedPrice(addon).toFixed(2)}`}
+                                formula={addon.perDay ? " Per Day " : ""}
 
                             />
                         );
