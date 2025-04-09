@@ -34,7 +34,10 @@ export default function SignInForm() {
       const user = await signInWithEmail(values.email, values.password);
       if (user) {
         setCookie("token", user.uid, { path: "/", maxAge: 60 * 60 * 24 }); // Store for 1 day
-        route.push("/")
+       // Ensure navigation works in production
+    setTimeout(() => {
+      route.push("/");
+    }, 100);
         console.log("Email/Password Sign-In Success:", user);
       }
     },
